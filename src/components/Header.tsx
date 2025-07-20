@@ -1,4 +1,4 @@
-import { ShoppingBag, User, Search } from "lucide-react";
+import { ShoppingCart, User, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -8,8 +8,12 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-gold rounded-lg shadow-glow animate-glow-pulse" />
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-gold rounded-lg shadow-glow animate-glow-pulse flex items-center justify-center">
+              <div className="w-6 h-8 bg-gradient-ember rounded-sm relative">
+                <div className="absolute top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-lantern-glow rounded-full animate-lantern-flicker"></div>
+              </div>
+            </div>
             <h1 className="text-2xl font-bold text-primary-glow">
               PokeTavern
             </h1>
@@ -32,7 +36,7 @@ const Header = () => {
               <User className="w-5 h-5" />
             </Button>
             <Button variant="ghost" size="icon" className="text-foreground hover:text-primary hover:bg-primary/10 relative">
-              <ShoppingBag className="w-5 h-5" />
+              <ShoppingCart className="w-5 h-5" />
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-tavern-ember text-xs rounded-full flex items-center justify-center text-white animate-lantern-flicker">
                 3
               </span>

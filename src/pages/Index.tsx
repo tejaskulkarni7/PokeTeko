@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import ProductGrid from "@/components/ProductGrid";
+import Footer from "@/components/Footer";
 import tavernBg from "@/assets/tavern-bg.jpg";
 
 const Index = () => {
@@ -21,7 +22,7 @@ const Index = () => {
             <div className="max-w-4xl mx-auto">
               <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
                 Welcome to{" "}
-                <span className="text-transparent bg-gradient-gold bg-clip-text animate-glow-pulse">
+                <span className="text-primary-glow animate-glow-pulse">
                   PokeTavern
                 </span>
               </h1>
@@ -41,6 +42,7 @@ const Index = () => {
         </section>
 
         <ProductGrid />
+        <Footer />
       </div>
     </div>
   );

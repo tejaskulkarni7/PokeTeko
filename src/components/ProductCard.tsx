@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface ProductCardProps {
@@ -48,11 +48,7 @@ const ProductCard = ({ id, name, price, image, rarity, condition, set }: Product
           
           {/* Overlay with actions */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <div className="absolute bottom-4 left-4 right-4 flex gap-2">
-              <Button size="sm" variant="secondary" className="flex-1 bg-card/90 hover:bg-card text-card-foreground">
-                <Eye className="w-4 h-4 mr-1" />
-                View
-              </Button>
+            <div className="absolute bottom-4 right-4">
               <Button size="sm" variant="ghost" className="bg-card/90 hover:bg-card text-card-foreground">
                 <Heart className="w-4 h-4" />
               </Button>
