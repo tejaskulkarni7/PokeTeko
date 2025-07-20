@@ -2,41 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* PokeTavern Design System - Homely Tavern Theme with Magical Lighting */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Dark tavern base colors */
+    --background: 25 8% 8%;
+    --foreground: 42 15% 92%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card colors - warm wood tones */
+    --card: 30 12% 12%;
+    --card-foreground: 42 15% 92%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Popover colors */
+    --popover: 25 15% 10%;
+    --popover-foreground: 42 15% 92%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - magical amber glow */
+    --primary: 42 85% 55%;
+    --primary-foreground: 25 8% 8%;
+    --primary-glow: 42 95% 65%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - warm copper */
+    --secondary: 18 40% 25%;
+    --secondary-foreground: 42 15% 92%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted - darker wood */
+    --muted: 20 15% 15%;
+    --muted-foreground: 42 25% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - mystical purple */
+    --accent: 280 35% 35%;
+    --accent-foreground: 42 15% 92%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Destructive - warm red */
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 42 15% 92%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders and inputs */
+    --border: 25 20% 20%;
+    --input: 25 20% 18%;
+    --ring: 42 85% 55%;
 
-    --radius: 0.5rem;
+    /* Tavern-specific colors */
+    --tavern-wood: 30 25% 18%;
+    --tavern-gold: 45 90% 60%;
+    --tavern-ember: 15 85% 45%;
+    --lantern-glow: 42 100% 70%;
+
+    /* Gradients */
+    --gradient-tavern: linear-gradient(135deg, hsl(25 8% 8%), hsl(30 12% 12%));
+    --gradient-gold: linear-gradient(135deg, hsl(42 85% 55%), hsl(45 90% 60%));
+    --gradient-ember: linear-gradient(135deg, hsl(15 85% 45%), hsl(25 75% 55%));
+    --gradient-lantern: radial-gradient(circle, hsl(42 100% 70% / 0.3), transparent 70%);
+
+    /* Shadows and glows */
+    --shadow-tavern: 0 10px 30px -10px hsl(25 8% 4% / 0.8);
+    --shadow-glow: 0 0 20px hsl(42 85% 55% / 0.4);
+    --shadow-ember: 0 0 15px hsl(15 85% 45% / 0.3);
+
+    /* Animation timings */
+    --transition-tavern: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
