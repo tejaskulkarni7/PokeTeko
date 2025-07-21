@@ -9,27 +9,15 @@ interface ProductCardProps {
   name: string;
   price: number;
   image: string;
-  rarity: string;
   condition: string;
   set: string;
 }
 
-const ProductCard = ({ id, name, price, image, rarity, condition, set }: ProductCardProps) => {
+const ProductCard = ({ id, name, price, image, condition, set }: ProductCardProps) => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
     navigate(`/product/${id}`);
-  };
-
-  const getRarityColor = (rarity: string) => {
-    switch (rarity.toLowerCase()) {
-      case 'common': return 'bg-muted text-muted-foreground';
-      case 'uncommon': return 'bg-secondary text-secondary-foreground';
-      case 'rare': return 'bg-primary text-primary-foreground';
-      case 'ultra rare': return 'bg-gradient-gold text-primary-foreground';
-      case 'secret rare': return 'bg-accent text-accent-foreground';
-      default: return 'bg-muted text-muted-foreground';
-    }
   };
 
   return (
@@ -49,16 +37,9 @@ const ProductCard = ({ id, name, price, image, rarity, condition, set }: Product
           {/* Overlay with actions */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="absolute bottom-4 right-4">
-              <Button size="sm" variant="ghost" className="bg-card/90 hover:bg-card text-card-foreground">
-                <Heart className="w-4 h-4" />
-              </Button>
             </div>
           </div>
 
-          {/* Rarity Badge */}
-          <Badge className={`absolute top-2 right-2 ${getRarityColor(rarity)}`}>
-            {rarity}
-          </Badge>
         </div>
 
         {/* Card Info */}

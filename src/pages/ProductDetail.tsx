@@ -1,53 +1,43 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Heart, Share2, ShoppingCart } from "lucide-react";
+import { ArrowLeft, Share2, ShoppingCart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import supabase from "../../supabaseClient";
 
-// Mock data - in real app this would come from API
-const mockProductDetail = {
-  id: "1",
-  name: "Pikachu VMAX",
-  price: 29.99,
-  image: "https://images.unsplash.com/photo-1542779283-429940ce8336?w=600&h=900&fit=crop",
-  rarity: "Ultra Rare",
-  condition: "Near Mint",
-  set: "Vivid Voltage",
-  cardNumber: "043/185",
-  artist: "PLANETA Mochizuki",
-  description: "This electric mouse Pokemon has stored up so much electricity in its body that it glows with golden light. When Pikachu releases this energy, its power is truly devastating to behold.",
-  hp: "310",
-  type: "Lightning",
-  weakness: "Fighting",
-  retreat: "2",
-  attacks: [
-    {
-      name: "Max Lightning",
-      cost: ["Lightning", "Lightning", "Lightning"],
-      damage: "120+",
-      description: "This attack does 30 more damage for each Lightning Energy attached to all of your Pokémon."
-    }
-  ],
-  specifications: [
-    { label: "Card Type", value: "Pokémon" },
-    { label: "Stage", value: "VMAX" },
-    { label: "Evolves From", value: "Pikachu V" },
-    { label: "Regulation Mark", value: "D" },
-    { label: "Release Date", value: "November 13, 2020" }
-  ]
-};
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const { data, error } = await supabase
+        .from("pokemon")
+        .select("*")
+        .eq("id", id)
+        .single();
+      if (!error && data) {
+        setProduct({
+          ...data,
+          image: `${SUPABASE_URL}/storage/v1/object/public/images/${data.image}.jpg`
+        });
+      }
+    };
+    if (id) fetchProduct();
+  }, [id]);
 
   const handleAddToCart = () => {
+    if (!product) return;
     toast({
       title: "Added to Cart!",
-      description: `${mockProductDetail.name} has been added to your cart.`,
+      description: `${product.name} has been added to your cart.`,
     });
   };
 
@@ -55,16 +45,13 @@ const ProductDetail = () => {
     navigate(-1);
   };
 
-  const getRarityColor = (rarity: string) => {
-    switch (rarity.toLowerCase()) {
-      case 'common': return 'bg-muted text-muted-foreground';
-      case 'uncommon': return 'bg-secondary text-secondary-foreground';
-      case 'rare': return 'bg-primary text-primary-foreground';
-      case 'ultra rare': return 'bg-gradient-gold text-primary-foreground';
-      case 'secret rare': return 'bg-accent text-accent-foreground';
-      default: return 'bg-muted text-muted-foreground';
-    }
-  };
+  if (!product) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <span className="text-muted-foreground">Loading...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-tavern">
@@ -81,18 +68,27 @@ const ProductDetail = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Card Image */}
-          <div className="space-y-4">
-            <Card className="overflow-hidden bg-card/80 border-border/50 shadow-tavern">
-              <CardContent className="p-0">
-                <div className="aspect-[2/3] relative">
-                  <img 
-                    src={mockProductDetail.image} 
-                    alt={mockProductDetail.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </CardContent>
-            </Card>
+          <div
+            className="relative w-[25rem] h-[38rem] mx-auto overflow-hidden group"
+            style={{ maxWidth: "100%" }}
+            onMouseMove={e => {
+              const img = e.currentTarget.querySelector("img");
+              const rect = e.currentTarget.getBoundingClientRect();
+              const x = ((e.clientX - rect.left) / rect.width) * 100;
+              const y = ((e.clientY - rect.top) / rect.height) * 100;
+              img.style.transformOrigin = `${x}% ${y}%`;
+            }}
+            onMouseLeave={e => {
+              const img = e.currentTarget.querySelector("img");
+              img.style.transformOrigin = "center center";
+            }}
+          >
+            <img 
+              src={product.image} 
+              alt={product.name}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-150"
+              style={{ transformOrigin: "center center" }}
+            />
           </div>
 
           {/* Product Details */}
@@ -100,30 +96,35 @@ const ProductDetail = () => {
             <div>
               <div className="flex items-start justify-between mb-2">
                 <h1 className="text-3xl font-bold text-foreground">
-                  {mockProductDetail.name}
+                  {product.name}
                 </h1>
                 <div className="flex gap-2">
-                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
-                    <Heart className="w-5 h-5" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-muted-foreground hover:text-primary"
+                    onClick={() => {
+                      navigator.clipboard.writeText(window.location.href);
+                      toast({
+                        title: "Link copied!",
+                        description: "Product link copied to clipboard.",
+                      });
+                    }}
+                  >
                     <Share2 className="w-5 h-5" />
                   </Button>
                 </div>
               </div>
               
               <div className="flex items-center gap-3 mb-4">
-                <Badge className={getRarityColor(mockProductDetail.rarity)}>
-                  {mockProductDetail.rarity}
-                </Badge>
                 <Badge variant="outline" className="border-border/50">
-                  {mockProductDetail.condition}
+                  {product.condition}
                 </Badge>
-                <span className="text-muted-foreground">{mockProductDetail.set}</span>
+                <span className="text-muted-foreground">{product.set}</span>
               </div>
 
               <p className="text-4xl font-bold text-primary-glow mb-6">
-                ${mockProductDetail.price.toFixed(2)}
+                ${product.price?.toFixed(2)}
               </p>
             </div>
 
@@ -131,7 +132,7 @@ const ProductDetail = () => {
             <div>
               <h3 className="text-lg font-semibold text-foreground mb-2">Description</h3>
               <p className="text-muted-foreground leading-relaxed">
-                {mockProductDetail.description}
+                {"this is a test description for the product. It provides details about the card, its features, and why it's a great addition to any collection."}
               </p>
             </div>
 
@@ -144,29 +145,21 @@ const ProductDetail = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">HP:</span>
-                    <span className="text-foreground font-medium">{mockProductDetail.hp}</span>
+                    <span className="text-foreground font-medium">{"test"}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Type:</span>
-                    <span className="text-foreground font-medium">{mockProductDetail.type}</span>
+                    <span className="text-foreground font-medium">{"test2"}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Weakness:</span>
-                    <span className="text-foreground font-medium">{mockProductDetail.weakness}</span>
+                    <span className="text-foreground font-medium">{"test3"}</span>
                   </div>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Card #:</span>
-                    <span className="text-foreground font-medium">{mockProductDetail.cardNumber}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Artist:</span>
-                    <span className="text-foreground font-medium">{mockProductDetail.artist}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Retreat:</span>
-                    <span className="text-foreground font-medium">{mockProductDetail.retreat}</span>
+                    <span className="text-foreground font-medium">{"test4"}</span>
                   </div>
                 </div>
               </div>

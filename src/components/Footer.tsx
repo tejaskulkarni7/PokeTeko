@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import {Mail, MapPin, Phone } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 const Footer = () => {
@@ -8,29 +8,30 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-gold rounded-lg shadow-glow animate-glow-pulse flex items-center justify-center">
-                <div className="w-6 h-8 bg-gradient-ember rounded-sm relative">
-                  <div className="absolute top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-lantern-glow rounded-full animate-lantern-flicker"></div>
-                </div>
+            <div className="flex items-center space-x-1">
+              <div className="relative w-10 h-10 flex items-center justify-center">
+                <span
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: "radial-gradient(circle, #ffd9007e 0%, transparent 90%)",
+                    filter: "blur(9px)",
+                    zIndex: 0,
+                  }}
+                />
+                <img
+                  src="\src\assets\lantern_logo.png"
+                  alt="PokeTavern Logo"
+                  className="w-10 h-10 bg-transparent relative z-10"
+                />
               </div>
-              <h3 className="text-xl font-bold text-primary-glow">PokeTavern</h3>
+              <h1 className="text-2xl font-bold text-primary-glow px-0 py-0">
+                PokeTavern
+              </h1>
             </div>
             <p className="text-muted-foreground leading-relaxed">
               Your magical destination for legendary Pokemon cards. 
               Each card tells a story waiting to be discovered.
             </p>
-            <div className="flex space-x-3">
-              <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center hover:bg-primary/30 transition-colors cursor-pointer">
-                <Facebook className="w-4 h-4 text-primary" />
-              </div>
-              <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center hover:bg-primary/30 transition-colors cursor-pointer">
-                <Twitter className="w-4 h-4 text-primary" />
-              </div>
-              <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center hover:bg-primary/30 transition-colors cursor-pointer">
-                <Instagram className="w-4 h-4 text-primary" />
-              </div>
-            </div>
           </div>
 
           {/* Quick Links */}
