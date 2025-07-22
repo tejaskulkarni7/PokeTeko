@@ -7,7 +7,9 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Share2, ShoppingCart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import supabase from "../../supabaseClient";
-
+import { useAuth } from "@/components/AuthProvider";
+import { useLoading } from "@/components/LoadingContext";
+import { set } from "date-fns";
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
 const ProductDetail = () => {
@@ -15,31 +17,123 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [product, setProduct] = useState(null);
+  const { user } = useAuth(); // <-- Get user
+  const [inCart, setInCart] = useState(false);
+  const { setIsLoading } = useLoading();
+      useEffect(() => {
+      const fetchProductAndCart = async () => {
+        if (!id) return;
+        setIsLoading(true);
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const { data, error } = await supabase
-        .from("pokemon")
-        .select("*")
-        .eq("id", id)
-        .single();
-      if (!error && data) {
-        setProduct({
+        // Step 1: Fetch product
+        const { data, error } = await supabase
+          .from("pokemon")
+          .select("*")
+          .eq("id", id)
+          .single();
+
+        if (error || !data) {
+          setIsLoading(false);
+          return;
+        }
+
+        const productWithImage = {
           ...data,
-          image: `${SUPABASE_URL}/storage/v1/object/public/images/${data.image}.jpg`
-        });
-      }
-    };
-    if (id) fetchProduct();
-  }, [id]);
+          image: `${SUPABASE_URL}/storage/v1/object/public/images/${data.image}.jpg`,
+        };
+        setProduct(productWithImage);
 
-  const handleAddToCart = () => {
-    if (!product) return;
+        // Step 2: Check cart (only if user is available)
+        if (user) {
+          const { count } = await supabase
+            .from("cart")
+            .select("*", { count: "exact", head: true })
+            .eq("user_id", user.id)
+            .eq("pokemon", productWithImage.id);
+
+          setInCart(count > 0);
+        }
+
+        // Step 3: All done
+        setIsLoading(false);
+      };
+
+      fetchProductAndCart();
+    }, [id, user]); // re-run if id or user changes
+
+
+
+  const handleAddToCart = async () => {
+  if (!product || !user) return;
+
+  // Check if item already exists in cart
+  const { count, error: fetchError } = await supabase
+    .from("cart")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("pokemon", product.id)
+    .limit(1);
+
+  if (fetchError && fetchError.code !== "PGRST116") {
+    toast({
+      title: "Error",
+      description: "Could not check cart. Please try again.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  if (count > 0) {
+    toast({
+      title: "Already in Cart",
+      description: `${product.name} is already in your cart.`,
+    });
+    return;
+  }
+
+  // Add to cart if not already there
+  const { error: insertError } = await supabase
+    .from("cart")
+    .insert({ user_id: user.id, pokemon: product.id });
+  
+  if (insertError) {
+    toast({
+      title: "Error",
+      description: "Failed to add to cart. Please try again.",
+      variant: "destructive",
+    });
+  } else {
     toast({
       title: "Added to Cart!",
       description: `${product.name} has been added to your cart.`,
     });
-  };
+    setInCart(true);
+  }
+};
+
+const handleRemoveFromCart = async () => {
+  if (!product || !user) return;
+
+  const { error } = await supabase
+    .from("cart")
+    .delete()
+    .eq("user_id", user.id)
+    .eq("pokemon", product.id);
+
+  if (error) {
+    toast({
+      title: "Error",
+      description: "Failed to remove from cart. Please try again.",
+      variant: "destructive",
+    });
+  } else {
+    toast({
+      title: "Removed from Cart",
+      description: `${product.name} was removed from your cart.`,
+    });
+    setInCart(false);
+  }
+};
 
   const handleGoBack = () => {
     navigate(-1);
@@ -48,7 +142,6 @@ const ProductDetail = () => {
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <span className="text-muted-foreground">Loading...</span>
       </div>
     );
   }
@@ -169,15 +262,18 @@ const ProductDetail = () => {
 
             {/* Add to Cart */}
             <div className="space-y-4">
-              <Button 
-                onClick={handleAddToCart}
-                className="w-full bg-gradient-gold hover:bg-gradient-ember text-primary-foreground font-semibold shadow-glow hover:shadow-ember transition-all duration-300"
+              <Button
+                onClick={inCart ? handleRemoveFromCart : handleAddToCart}
+                className={`w-full font-semibold shadow-glow transition-all duration-300 ${
+                  inCart
+                    ? "bg-red-500 hover:bg-red-600 text-white"
+                    : "bg-gradient-gold hover:bg-gradient-ember text-primary-foreground"
+                }`}
                 size="lg"
               >
                 <ShoppingCart className="w-5 h-5 mr-2" />
-                Add to Cart
+                {inCart ? "Remove from Cart" : "Add to Cart"}
               </Button>
-              
               <p className="text-sm text-muted-foreground text-center">
                 Fast shipping • Secure packaging • 30-day return policy
               </p>

@@ -5,10 +5,8 @@ import tavernBg from "@/assets/tavern-bg.jpg";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 const Index = () => {
   const navigate = useNavigate();
-
   const seeAllCards = () => {
     navigate("/all-cards");
   };

@@ -4,19 +4,60 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import supabase from "../../supabaseClient";
+import { useAuth } from "@/components/AuthProvider"; // <-- Add this import
 
 const Header = () => {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false); // <-- Add this state
   const navigate = useNavigate();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { user, logout } = useAuth(); // <-- Get user and logout
+
+  const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = () => {
+    if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
+    if (user) setShowProfileDropdown(true);
+  };
+
+  const handleMouseLeave = () => {
+    // Delay hiding to allow smoother movement
+    hoverTimeout.current = setTimeout(() => {
+      setShowProfileDropdown(false);
+    }, 150); // You can tweak the delay (ms)
+  };
+
+  const handleProfileClick = () => {
+    if (user) {
+      setShowProfileDropdown((prev) => !prev);
+    } else {
+      navigate(`/auth`);
+    }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    setShowProfileDropdown(false);
+    navigate("/auth");
+  };
+  const handleCartClick = () => {
+    navigate("/cart");
+  };
+
+  const handleDeleteAccount = async () => {
+    // Supabase delete user API (admin only, so this is a placeholder)
+    // You may need to call a backend function to delete the user
+    alert("Account deletion is not implemented. Please contact support.");
+    setShowProfileDropdown(false);
+  };
 
   // Autocomplete handler
   const handleSearchChange = async (e) => {
     const value = e.target.value;
     setSearch(value);
-
+    
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -108,12 +149,47 @@ const Header = () => {
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="text-foreground hover:text-primary hover:bg-primary/10">
-              <User className="w-5 h-5" />
+          <div className="flex items-center space-x-4 relative">
+            <div
+  className="relative"
+  onMouseEnter={handleMouseEnter}
+  onMouseLeave={handleMouseLeave}
+>
+  <Button
+    variant="ghost"
+    size="icon"
+    className="text-foreground hover:text-primary hover:bg-primary/10"
+    onClick={handleProfileClick}
+  >
+    <User className="w-5 h-5" />
+  </Button>
+
+  {user && showProfileDropdown && (
+    <div className="absolute right-0 top-full mt-1 w-56 bg-card border border-border rounded shadow-lg z-50 flex flex-col">
+      <div className="px-4 py-3 border-b border-border text-sm text-muted-foreground">
+        Signed in as<br />
+        <span className="font-semibold text-foreground">{user.email}</span>
+            </div>
+            <Button
+              variant="ghost"
+              className="justify-start px-4 py-2 w-full text-left"
+              onClick={handleLogout}
+            >
+              Log Out
             </Button>
-            <Button variant="ghost" size="icon" className="text-foreground hover:text-primary hover:bg-primary/10 relative">
+            <Button
+              variant="destructive"
+              className="justify-start px-4 py-2 w-full text-left"
+              onClick={handleDeleteAccount}
+            >
+              Delete Account
+            </Button>
+          </div>
+        )}
+      </div>
+            <Button variant="ghost" size="icon" className="text-foreground hover:text-primary hover:bg-primary/10 relative" onClick={handleCartClick}>
               <ShoppingCart className="w-5 h-5" />
+              
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-tavern-ember text-xs rounded-full flex items-center justify-center text-white animate-lantern-flicker">
                 3
               </span>

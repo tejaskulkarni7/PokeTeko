@@ -7,24 +7,35 @@ import Index from "./pages/Index";
 import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 import AllCards from "./pages/AllCards";
+import Auth from "./pages/Auth";
+import Cart from "./pages/Cart";
+import { AuthProvider } from "./components/AuthProvider";
+import { LoadingProvider } from "@/components/LoadingContext";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/all-cards" element={<AllCards />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <LoadingProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/all-cards" element={<AllCards />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+          <LoadingOverlay />
+        </TooltipProvider>
+      </AuthProvider>
+    </LoadingProvider>
   </QueryClientProvider>
 );
 

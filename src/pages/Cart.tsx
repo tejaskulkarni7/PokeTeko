@@ -7,56 +7,76 @@ import { ArrowDown, ArrowUp, ArrowLeft } from "lucide-react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { useLoading } from "@/components/LoadingContext";
-
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { useAuth } from "@/components/AuthProvider";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
-const AllCards = () => {
-  const [products, setProducts] = useState([]);
+const Cart = () => {
+  const [cartProducts, setCartProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [conditionFilter, setConditionFilter] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 1000]); // [min, max]
+  const [priceRange, setPriceRange] = useState([0, 1000]);
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const { setIsLoading } = useLoading();
+
+  const { user } = useAuth();
   const navigate = useNavigate();
-    
-    
+
   useEffect(() => {
-    
-    const fetchProducts = async () => { 
-      setIsLoading(true); 
-      const { data, error } = await supabase.from("pokemon").select("*");
-      if (!error && data) {
-        const productsWithImageUrl = data.map((product) => ({
-          ...product,
-          image: `${SUPABASE_URL}/storage/v1/object/public/images/${product.image}.jpg`,
-        }));
-        setProducts(productsWithImageUrl);
-        setFiltered(productsWithImageUrl);
+    const fetchCart = async () => {
+      setIsLoading(true);
+      if (!user) return;
+
+      // Step 1: Get items from cart for the current user
+      const { data: cartItems, error: cartError } = await supabase
+        .from("cart")
+        .select("pokemon")
+        .eq("user_id", user.id);
+
+      if (cartError || !cartItems.length) {
+        setCartProducts([]);
+        return;
       }
+
+      const pokemonIds = cartItems.map((item) => item.pokemon);
+
+      // Step 2: Get pokemon details for those IDs
+      const { data: pokemons, error: pokeError } = await supabase
+        .from("pokemon")
+        .select("*")
+        .in("id", pokemonIds);
+
+      if (pokeError) return;
+
+      const enriched = pokemons.map((product) => ({
+        ...product,
+        image: `${SUPABASE_URL}/storage/v1/object/public/images/${product.image}.jpg`,
+      }));
+
+      setCartProducts(enriched);
+      setFiltered(enriched);
       setIsLoading(false);
     };
-    fetchProducts();
+
+    fetchCart();
     
-  }, []);
+  }, [user]);
 
   // Filter + Sort
   useEffect(() => {
-    let result = [...products];
+    let result = [...cartProducts];
 
-    // Filter by condition
     if (conditionFilter) {
       result = result.filter((p) => p.condition === conditionFilter);
     }
 
-    // Filter by price range
     const [min, max] = priceRange;
-    result = result.filter((p) => p.price >= min && p.price <= max);
+    if (!isNaN(min)) result = result.filter((p) => p.price >= min);
+    if (!isNaN(max)) result = result.filter((p) => p.price <= max);
 
-    // Sort
     if (sortKey) {
       result.sort((a, b) => {
         const aVal = sortKey === "created_at" ? new Date(a[sortKey]) : a[sortKey];
@@ -66,28 +86,21 @@ const AllCards = () => {
     }
 
     setFiltered(result);
-  }, [conditionFilter, priceRange, sortKey, sortOrder, products]);
+  }, [conditionFilter, priceRange, sortKey, sortOrder, cartProducts]);
 
-  const handleGoBack = () => {
-    navigate(-1);
-  };
+  const handleGoBack = () => navigate(-1);
 
   return (
     <div className="min-h-screen bg-gradient-tavern">
       <Header />
       <div className="container mx-auto px-4 py-8">
-        {/* Section Header */}
         <div className="flex items-center justify-between mb-12">
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              onClick={handleGoBack}
-              className="text-foreground hover:text-primary hover:bg-primary/10"
-            >
+            <Button variant="ghost" onClick={handleGoBack} className="text-foreground hover:text-primary hover:bg-primary/10">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
-            <h2 className="text-3xl font-bold text-foreground">All Cards</h2>
+            <h2 className="text-3xl font-bold text-foreground">Your Cart</h2>
           </div>
         </div>
 
@@ -172,7 +185,6 @@ const AllCards = () => {
           </Button>
         </div>
 
-
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filtered.map((product) => (
@@ -185,4 +197,4 @@ const AllCards = () => {
   );
 };
 
-export default AllCards;
+export default Cart;

@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import supabase from "../../supabaseClient";
-
+import { useLoading } from "@/components/LoadingContext";
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL; // Make sure this is set in your .env
 
 const ProductGrid = () => {
   const [products, setProducts] = useState([]);
-
+  const { setIsLoading } = useLoading();
   useEffect(() => {
     const fetchProducts = async () => {
+      setIsLoading(true);
       const { data, error } = await supabase
         .from("pokemon")
         .select("*")
@@ -21,6 +22,7 @@ const ProductGrid = () => {
         }));
         setProducts(productsWithImageUrl);
       }
+      setIsLoading(false);
     };
     fetchProducts();
   }, []);
