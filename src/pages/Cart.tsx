@@ -102,6 +102,12 @@ const Cart = () => {
             </Button>
             <h2 className="text-3xl font-bold text-foreground">Your Cart</h2>
           </div>
+          <Button
+            onClick={() => navigate("/checkout")}
+            className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2 rounded-md shadow"
+        >
+            Checkout
+        </Button>
         </div>
 
         {/* Filter & Sort Controls */}

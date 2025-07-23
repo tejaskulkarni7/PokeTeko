@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ShoppingCart, User, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,29 @@ const Header = () => {
   const { user, logout } = useAuth(); // <-- Get user and logout
 
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      if (!user) {
+        setCartCount(0);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("cart")
+        .select("id", { count: "exact" })
+        .eq("user_id", user.id);
+
+      if (!error && data) {
+        setCartCount(data.length);
+      } else {
+        setCartCount(0);
+      }
+    };
+
+    fetchCartCount();
+  }, [user]);
 
   const handleMouseEnter = () => {
     if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
@@ -189,10 +212,11 @@ const Header = () => {
       </div>
             <Button variant="ghost" size="icon" className="text-foreground hover:text-primary hover:bg-primary/10 relative" onClick={handleCartClick}>
               <ShoppingCart className="w-5 h-5" />
-              
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-tavern-ember text-xs rounded-full flex items-center justify-center text-white animate-lantern-flicker">
-                3
-              </span>
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 bg-tavern-ember text-xs rounded-full flex items-center justify-center text-white animate-lantern-flicker">
+                  {cartCount}
+                </span>
+              )}
             </Button>
           </div>
         </div>

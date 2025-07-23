@@ -12,6 +12,7 @@ import Cart from "./pages/Cart";
 import { AuthProvider } from "./components/AuthProvider";
 import { LoadingProvider } from "@/components/LoadingContext";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import Checkout from "./pages/Checkout";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
               <Route path="/all-cards" element={<AllCards />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
