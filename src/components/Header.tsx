@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import supabase from "../../supabaseClient";
 import { useAuth } from "@/components/AuthProvider"; // <-- Add this import
-
+import PokeTavernLogo from "@/assets/lantern_logo.png";
 const Header = () => {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
@@ -126,7 +126,7 @@ const Header = () => {
                 }}
               />
               <img
-                src="\src\assets\lantern_logo.png"
+                src='url(${PokeTavernLogo})'
                 alt="PokeTavern Logo"
                 className="w-10 h-10 bg-transparent relative z-10"
               />

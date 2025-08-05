@@ -1,6 +1,6 @@
 import {Mail, MapPin, Phone } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-
+import PokeTavernLogo from "@/assets/lantern_logo.png";
 const Footer = () => {
   return (
     <footer className="bg-gradient-tavern border-t border-border/50 mt-20">
@@ -19,7 +19,7 @@ const Footer = () => {
                   }}
                 />
                 <img
-                  src="\src\assets\lantern_logo.png"
+                  src='url(${PokeTavernLogo})'
                   alt="PokeTavern Logo"
                   className="w-10 h-10 bg-transparent relative z-10"
                 />

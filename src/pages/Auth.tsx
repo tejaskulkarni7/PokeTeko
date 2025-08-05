@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/components/AuthProvider';
 import { useToast } from '@/hooks/use-toast';
 import { Vote, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import PokeTavernLogo from '@/assets/lantern_logo.png';
 
 export default function Auth() {
   const [email, setEmail] = useState('');
@@ -121,7 +122,7 @@ return (
                 }}
               />
               <img
-                src="\src\assets\lantern_logo.png"
+                src='url(${PokeTavernLogo})'
                 alt="PokeTavern Logo"
                 className="w-10 h-10 bg-transparent relative z-10"
               />
