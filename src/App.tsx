@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import AllCards from "./pages/AllCards";
 import Auth from "./pages/Auth";
 import Cart from "./pages/Cart";
+import Services from "./pages/Services";
 import { AuthProvider } from "./components/AuthProvider";
 import { LoadingProvider } from "@/components/LoadingContext";
 import LoadingOverlay from "@/components/LoadingOverlay";
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/all-cards" element={<AllCards />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/services" element={<Services />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

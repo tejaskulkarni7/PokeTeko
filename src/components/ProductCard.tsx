@@ -22,7 +22,7 @@ const ProductCard = ({ id, name, price, image, condition, set }: ProductCardProp
 
   return (
     <Card 
-      className="group relative overflow-hidden bg-card/80 border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-glow cursor-pointer backdrop-blur-sm"
+      className="group relative overflow-hidden bg-card/80 border-border/50 hover:border-primary/100 transition-all duration-300 hover:shadow-glow cursor-pointer backdrop-blur-sm"
       onClick={handleCardClick}
     >
       <CardContent className="p-0">

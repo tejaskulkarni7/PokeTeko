@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/components/AuthProvider';
 import { useToast } from '@/hooks/use-toast';
 import { Vote, Eye, EyeOff, ArrowLeft } from 'lucide-react';
-import PokeTavernLogo from '@/assets/lantern_logo.png';
+import PokeTavernLogo from "@/assets/lantern_logo.png";
 
 export default function Auth() {
   const [email, setEmail] = useState('');
@@ -68,7 +68,7 @@ export default function Auth() {
       if (success) {
         toast({
           title: "Account created!",
-          description: "Welcome to PokeTavern! Your account has been created successfully.",
+          description: "Welcome to PokeTek! Your account has been created successfully.",
         });
       } else {
         toast({
@@ -102,7 +102,7 @@ return (
         className="text-foreground hover:text-primary hover:bg-primary/10"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
-        Back to Shop
+        Back
       </Button>
     </div>
 
@@ -121,22 +121,22 @@ return (
                   zIndex: 0,
                 }}
               />
-              <img
-                src='url(${PokeTavernLogo})'
-                alt="PokeTavern Logo"
-                className="w-10 h-10 bg-transparent relative z-10"
-              />
+                <img
+                  src={PokeTavernLogo}
+                  alt="PokeTavern Logo"
+                  className="w-10 h-10 bg-transparent relative z-10"
+                />
             </div>
-            <h1 className="text-2xl font-bold text-primary-glow px-0 py-0">PokeTavern</h1>
+            <h1 className="text-2xl font-bold text-white px-0 py-0">PokeTavern</h1>
           </div>
         </div>
 
         {/* Card */}
         <Card className="animate-fade-in">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Welcome to PokeTavern</CardTitle>
+            <CardTitle className="text-2xl">Welcome!</CardTitle>
             <CardDescription>
-              Purchase from a wide selection of Pokémon card products.
+              Browse our services or check out our latest products.
             </CardDescription>
           </CardHeader>
           <CardContent>

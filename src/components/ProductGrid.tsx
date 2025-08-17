@@ -28,10 +28,13 @@ const ProductGrid = () => {
   }, []);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 relative z-10">
       {/* Section Header */}
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-foreground mb-4">
+        <h2 className="text-3xl font-bold text-foreground mb-4" style={{ 
+          color: "white",
+          textShadow: "0 2px 4px rgba(0,0,0,0.8)"
+        }}>
           Featured Cards
         </h2>
       </div>

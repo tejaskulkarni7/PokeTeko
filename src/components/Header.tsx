@@ -2,16 +2,18 @@ import { useState, useRef, useEffect } from "react";
 import { ShoppingCart, User, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import supabase from "../../supabaseClient";
 import { useAuth } from "@/components/AuthProvider"; // <-- Add this import
 import PokeTavernLogo from "@/assets/lantern_logo.png";
+
 const Header = () => {
   const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false); // <-- Add this state
   const navigate = useNavigate();
+  const location = useLocation(); // Add this to get current location
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { user, logout } = useAuth(); // <-- Get user and logout
 
@@ -65,8 +67,17 @@ const Header = () => {
     setShowProfileDropdown(false);
     navigate("/auth");
   };
+  
   const handleCartClick = () => {
     navigate("/cart");
+  };
+
+  const handleServicesClick = () => {
+    navigate("/services");
+  };
+
+  const handleShopClick = () => {
+    navigate("/");
   };
 
   const handleDeleteAccount = async () => {
@@ -110,6 +121,9 @@ const Header = () => {
     navigate(`/product/${id}`);
   };
 
+  // Determine if we're on the services page
+  const isServicesPage = location.pathname === '/services';
+
   return (
     <header className="sticky top-0 z-50 bg-gradient-tavern border-b border-border/50 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-4">
@@ -125,14 +139,14 @@ const Header = () => {
                   zIndex: 0,
                 }}
               />
-              <img
-                src='url(${PokeTavernLogo})'
-                alt="PokeTavern Logo"
-                className="w-10 h-10 bg-transparent relative z-10"
-              />
+                <img
+                  src={PokeTavernLogo}
+                  alt="PokeTavern Logo"
+                  className="w-10 h-10 bg-transparent relative z-10"
+                />
             </div>
-            <h1 className="text-2xl font-bold text-primary-glow px-0 py-0">
-              PokeTavern
+            <h1 className="text-2xl font-bold text-white px-0 py-0">
+              PokeTek
             </h1>
           </div>
 
@@ -170,46 +184,55 @@ const Header = () => {
               </ul>
             )}
           </div>
-
+          
+          {/* Dynamic Navigation Button */}
+          <Button
+            variant="ghost"
+            className="px-4 py-2 bg-card/50 border border-border/50 hover:border-primary/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/30 transition-all duration-200"
+            onClick={isServicesPage ? handleShopClick : handleServicesClick}
+          >
+            {isServicesPage ? 'PokeTek Shop' : 'PokeTek Services'}
+          </Button>
+          
           {/* Navigation */}
           <div className="flex items-center space-x-4 relative">
             <div
-  className="relative"
-  onMouseEnter={handleMouseEnter}
-  onMouseLeave={handleMouseLeave}
->
-  <Button
-    variant="ghost"
-    size="icon"
-    className="text-foreground hover:text-primary hover:bg-primary/10"
-    onClick={handleProfileClick}
-  >
-    <User className="w-5 h-5" />
-  </Button>
+              className="relative"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-foreground hover:text-primary hover:bg-primary/10"
+                onClick={handleProfileClick}
+              >
+                <User className="w-5 h-5" />
+              </Button>
 
-  {user && showProfileDropdown && (
-    <div className="absolute right-0 top-full mt-1 w-56 bg-card border border-border rounded shadow-lg z-50 flex flex-col">
-      <div className="px-4 py-3 border-b border-border text-sm text-muted-foreground">
-        Signed in as<br />
-        <span className="font-semibold text-foreground">{user.email}</span>
+              {user && showProfileDropdown && (
+                <div className="absolute right-0 top-full mt-1 w-56 bg-card border border-border rounded shadow-lg z-50 flex flex-col">
+                  <div className="px-4 py-3 border-b border-border text-sm text-muted-foreground">
+                    Signed in as<br />
+                    <span className="font-semibold text-foreground">{user.email}</span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    className="justify-start px-4 py-2 w-full text-left"
+                    onClick={handleLogout}
+                  >
+                    Log Out
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    className="justify-start px-4 py-2 w-full text-left"
+                    onClick={handleDeleteAccount}
+                  >
+                    Delete Account
+                  </Button>
+                </div>
+              )}
             </div>
-            <Button
-              variant="ghost"
-              className="justify-start px-4 py-2 w-full text-left"
-              onClick={handleLogout}
-            >
-              Log Out
-            </Button>
-            <Button
-              variant="destructive"
-              className="justify-start px-4 py-2 w-full text-left"
-              onClick={handleDeleteAccount}
-            >
-              Delete Account
-            </Button>
-          </div>
-        )}
-      </div>
             <Button variant="ghost" size="icon" className="text-foreground hover:text-primary hover:bg-primary/10 relative" onClick={handleCartClick}>
               <ShoppingCart className="w-5 h-5" />
               {cartCount > 0 && (

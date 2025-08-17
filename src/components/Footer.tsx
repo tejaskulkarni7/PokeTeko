@@ -19,13 +19,13 @@ const Footer = () => {
                   }}
                 />
                 <img
-                  src='url(${PokeTavernLogo})'
+                  src={PokeTavernLogo}
                   alt="PokeTavern Logo"
                   className="w-10 h-10 bg-transparent relative z-10"
                 />
               </div>
-              <h1 className="text-2xl font-bold text-primary-glow px-0 py-0">
-                PokeTavern
+              <h1 className="text-2xl font-bold text-white px-0 py-0">
+                PokeTek
               </h1>
             </div>
             <p className="text-muted-foreground leading-relaxed">
@@ -86,7 +86,7 @@ const Footer = () => {
 
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p className="text-muted-foreground text-sm">
-            © 2024 PokeTavern. All rights reserved. Pokemon cards are © Nintendo/Game Freak.
+            © 2024 PokeTek. All rights reserved. Pokemon cards are © Nintendo/Game Freak.
           </p>
           <div className="flex space-x-6">
             <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">

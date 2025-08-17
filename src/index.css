@@ -2,123 +2,107 @@
 @tailwind components;
 @tailwind utilities;
 
-/* PokeTavern Design System - Homely Tavern Theme with Magical Lighting */
+/* PokeTavern Design System - Dark & Purple Theme */
 
 @layer base {
   :root {
-    /* Dark tavern base colors */
-    --background: 25 8% 8%;
-    --foreground: 42 15% 92%;
+    /* Base colors */
+    --background: 270 15% 8%; /* Dark purple background */
+    --foreground: 0 0% 100%; /* White text */
 
-    /* Card colors - warm wood tones */
-    --card: 30 12% 12%;
-    --card-foreground: 42 15% 92%;
+    /* Card colors */
+    --card: 270 20% 12%; /* Slightly lighter purple */
+    --card-foreground: 0 0% 100%; /* White text */
 
     /* Popover colors */
-    --popover: 25 15% 10%;
-    --popover-foreground: 42 15% 92%;
+    --popover: 270 18% 10%;
+    --popover-foreground: 0 0% 100%;
 
-    /* Primary - magical amber glow */
-    --primary: 42 85% 55%;
-    --primary-foreground: 25 8% 8%;
-    --primary-glow: 42 95% 65%;
+    /* Primary - regular purple */
+    --primary: 250 60% 70%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 270 70% 60%;
 
-    /* Secondary - warm copper */
-    --secondary: 18 40% 25%;
-    --secondary-foreground: 42 15% 92%;
+    /* Secondary - darker purple */
+    --secondary: 270 30% 20%;
+    --secondary-foreground: 0 0% 100%;
 
-    /* Muted - darker wood */
-    --muted: 20 15% 15%;
-    --muted-foreground: 42 25% 65%;
+    /* Muted */
+    --muted: 270 20% 15%;
+    --muted-foreground: 0 0% 80%;
 
-    /* Accent - mystical purple */
-    --accent: 280 35% 35%;
-    --accent-foreground: 42 15% 92%;
+    /* Accent - brighter purple */
+    --accent: 280 50% 55%;
+    --accent-foreground: 0 0% 100%;
 
-    /* Destructive - warm red */
-    --destructive: 0 75% 55%;
-    --destructive-foreground: 42 15% 92%;
+    /* Destructive - red for danger */
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
 
     /* Borders and inputs */
-    --border: 25 20% 20%;
-    --input: 25 20% 18%;
-    --ring: 42 85% 55%;
-
-    /* Tavern-specific colors */
-    --tavern-wood: 30 25% 18%;
-    --tavern-gold: 45 90% 60%;
-    --tavern-ember: 15 85% 45%;
-    --lantern-glow: 42 100% 70%;
+    --border: 270 25% 20%;
+    --input: 270 25% 18%;
+    --ring: 280 70% 55%;
 
     /* Gradients */
-    --gradient-tavern: linear-gradient(135deg, hsl(25 8% 8%), hsl(30 12% 12%));
-    --gradient-gold: linear-gradient(135deg, hsl(42 85% 55%), hsl(45 90% 60%));
-    --gradient-ember: linear-gradient(135deg, hsl(15 85% 45%), hsl(25 75% 55%));
-    --gradient-lantern: radial-gradient(circle, hsl(42 100% 70% / 0.3), transparent 70%);
+    --gradient-primary: linear-gradient(135deg, hsl(270 15% 8%), hsl(270 20% 12%));
+    --gradient-accent: linear-gradient(135deg, hsl(270 60% 50%), hsl(280 50% 55%));
 
     /* Shadows and glows */
-    --shadow-tavern: 0 10px 30px -10px hsl(25 8% 4% / 0.8);
-    --shadow-glow: 0 0 20px hsl(42 85% 55% / 0.4);
-    --shadow-ember: 0 0 15px hsl(15 85% 45% / 0.3);
+    --shadow-primary: 0 0 20px hsl(270 60% 50% / 0.4);
+    --shadow-accent: 0 0 15px hsl(280 50% 55% / 0.3);
 
-    /* Animation timings */
-    --transition-tavern: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
+    --transition-theme: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar */
+    --sidebar-background: 0 0% 0%; /* Black */
+    --sidebar-foreground: 0 0% 100%; /* White */
+    --sidebar-primary: 270 60% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 280 50% 55%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 270 20% 20%;
+    --sidebar-ring: 280 70% 55%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 270 15% 6%; /* Almost black purple */
+    --foreground: 0 0% 100%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 270 20% 10%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 270 18% 8%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 280 60% 55%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 270 30% 15%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 270 20% 12%;
+    --muted-foreground: 0 0% 80%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 280 50% 60%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --border: 270 25% 15%;
+    --input: 270 25% 12%;
+    --ring: 280 70% 55%;
+
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 280 60% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 270 50% 50%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 270 20% 15%;
+    --sidebar-ring: 280 70% 55%;
   }
 }
 
