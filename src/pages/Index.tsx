@@ -1,9 +1,7 @@
 import Header from "@/components/Header";
 import ProductGrid from "@/components/ProductGrid";
 import Footer from "@/components/Footer";
-import backgroundImage from "@/assets/background.webp";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import DarkVeil from "@/components/DarkVeil";
 import { useEffect, useState } from "react";
@@ -27,16 +25,20 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-tavern relative">
       <Header />
-      
+
       {/* Content with fade-in transition */}
-      <div className={`relative z-10 transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+      <div
+        className={`relative z-10 transition-opacity duration-500 ${
+          isLoaded ? "opacity-100" : "opacity-0"
+        }`}
+      >
         {/* Background animation covering hero and product grid */}
         <div className="absolute inset-0 top-0 h-screen pointer-events-none overflow-hidden">
           <div className="w-full h-full opacity-50">
             <DarkVeil />
           </div>
         </div>
-        
+
         {/* Hero Section */}
         <section className="text-center relative py-16">
           <div className="container mx-auto px-4 relative">
@@ -47,12 +49,13 @@ const Index = () => {
                   style={{
                     color: "hsla(270, 27%, 87%, 1.00)",
                     background: "none",
-                    textShadow: "0 0 20px #6d29daff, 0 0 32px #9f20e9e7"
+                    textShadow: "0 0 20px #6d29daff, 0 0 32px #9f20e9e7",
                   }}
                 >
                   PokeTek Shop
                 </span>
               </h1>
+
               <p className="text-xl md:text-2xl text-muted-foreground mb-4 leading-relaxed">
                 Discover legendary Pokemon products.
               </p>
@@ -63,20 +66,48 @@ const Index = () => {
                 <div className="w-3 h-3 bg-primary rounded-full animate-lantern-flicker" />
                 <div className="h-px bg-gradient-to-r from-transparent via-primary to-transparent flex-1 max-w-xs" />
               </div>
-              <Button
-                onClick={seeAllCards}
-                className="w-full bg-gradient-gold hover:bg-gradient-ember text-primary-foreground font-semibold shadow-glow hover:shadow-ember transition-all duration-300"
-                size="lg"
-              >
-                See All Cards
-              </Button>
+
+              {/* Side-by-side buttons */}
+              <div className="flex justify-center gap-4 mt-6">
+<div className="flex justify-center gap-20 mt-6">
+  <Button
+    onClick={seeAllCards}
+    className="flex-1 text-xl px-6 py-3 bg-transparent text-white font-semibold 
+               border-2 border-transparent 
+               hover:border-primary/100 hover:bg-transparent 
+               focus:ring-2 focus:ring-primary/30 
+               transition-all duration-300"
+    size="lg"
+  >
+    Cards
+  </Button>
+
+  <Button
+    onClick={seeAllCards}
+    className="flex-1 text-xl px-6 py-3 bg-transparent text-white font-semibold 
+               border-2 border-transparent 
+               hover:border-primary/100 hover:bg-transparent 
+               focus:ring-2 focus:ring-primary/30 
+               transition-all duration-300"
+    size="lg"
+  >
+    Apparel
+  </Button>
+</div>
+
+
+
+
+
+            </div>
+
             </div>
           </div>
         </section>
-
-        <ProductGrid />
-        <Footer />
       </div>
+
+      <ProductGrid />
+      <Footer />
     </div>
   );
 };

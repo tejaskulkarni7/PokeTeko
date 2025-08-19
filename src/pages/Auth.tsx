@@ -127,7 +127,7 @@ return (
                   className="w-10 h-10 bg-transparent relative z-10"
                 />
             </div>
-            <h1 className="text-2xl font-bold text-white px-0 py-0">PokeTavern</h1>
+            <h1 className="text-2xl font-bold text-white px-0 py-0">PokeTek</h1>
           </div>
         </div>
 

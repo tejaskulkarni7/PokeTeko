@@ -110,30 +110,30 @@ const AllCards = () => {
             </select>
           </div>
 
-          {/* Price Range Slider */}
-          <div className="flex flex-col gap-1 items-start w-64">
-            <label className="text-sm text-foreground">Price Range</label>
-            <div className="w-full px-2">
-              <Slider
-                range
-                min={0}
-                max={1000}
-                step={10}
-                value={priceRange}
-                onChange={(vals) => setPriceRange(Array.isArray(vals) ? vals : [vals, vals])}
-                trackStyle={[{ background: "linear-gradient(90deg, #FFD700 0%, #FFA500 100%)", height: 8 }]}
-                handleStyle={[
-                  { borderColor: "#FFD700", backgroundColor: "#FFD700", width: 20, height: 20 },
-                  { borderColor: "#FFA500", backgroundColor: "#FFA500", width: 20, height: 20 },
-                ]}
-                railStyle={{ background: "#222", height: 8 }}
-              />
-              <div className="flex justify-between text-xs text-foreground mt-1">
-                <span>${priceRange[0]}</span>
-                <span>${priceRange[1]}</span>
+              {/* Price Range Slider */}
+              <div className="flex flex-col gap-1 items-start w-64">
+                <label className="text-sm text-foreground">Price Range</label>
+                <div className="w-full px-2">
+                  <Slider
+                    range
+                    min={0}
+                    max={1000}
+                    step={10}
+                    value={priceRange}
+                    onChange={(vals) => setPriceRange(Array.isArray(vals) ? vals : [vals, vals])}
+                    trackStyle={[{ background: "linear-gradient(90deg, #9d54f1ff 0%, #4c00ffff 100%)", height: 8 }]}
+                    handleStyle={[
+                      { borderColor: "#9d54f1ff", backgroundColor: "#9d54f1ff", width: 20, height: 20 },
+                      { borderColor: "#4c00ffff", backgroundColor: "#4c00ffff", width: 20, height: 20 },
+                    ]}
+                    railStyle={{ background: "#222", height: 8 }}
+                  />
+                  <div className="flex justify-between text-xs text-foreground mt-1">
+                    <span>${priceRange[0]}</span>
+                    <span>${priceRange[1]}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
           {/* Sort by Price */}
           <Button
