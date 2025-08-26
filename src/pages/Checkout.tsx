@@ -20,7 +20,8 @@ const Checkout = () => {
 
       const { data: cartData, error: cartError } = await supabase
         .from("cart")
-        .select("pokemon")
+        .select("product_id")
+        .eq("product_type", 'pokemon')
         .eq("user_id", user.id);
 
       if (cartError || !cartData.length) {

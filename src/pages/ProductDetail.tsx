@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Share2, ShoppingCart } from "lucide-react";
@@ -49,7 +48,7 @@ const ProductDetail = () => {
             .from("cart")
             .select("*", { count: "exact", head: true })
             .eq("user_id", user.id)
-            .eq("pokemon", productWithImage.id);
+            .eq("product_id", productWithImage.id);
 
           setInCart(count > 0);
         }
@@ -71,7 +70,8 @@ const ProductDetail = () => {
     .from("cart")
     .select("*", { count: "exact", head: true })
     .eq("user_id", user.id)
-    .eq("pokemon", product.id)
+    .eq("product_type", 'pokemon')
+    .eq("product_id", product.id)
     .limit(1);
 
   if (fetchError && fetchError.code !== "PGRST116") {
@@ -94,7 +94,7 @@ const ProductDetail = () => {
   // Add to cart if not already there
   const { error: insertError } = await supabase
     .from("cart")
-    .insert({ user_id: user.id, pokemon: product.id });
+    .insert({ user_id: user.id, product_id: product.id, product_type: 'pokemon' });
   
   if (insertError) {
     toast({
@@ -118,7 +118,8 @@ const handleRemoveFromCart = async () => {
     .from("cart")
     .delete()
     .eq("user_id", user.id)
-    .eq("pokemon", product.id);
+    .eq("product_type", 'pokemon')
+    .eq("product_id", product.id);
 
   if (error) {
     toast({
@@ -210,52 +211,12 @@ const handleRemoveFromCart = async () => {
               </div>
               
               <div className="flex items-center gap-3 mb-4">
-                <Badge variant="outline" className="border-border/50">
-                  {product.condition}
-                </Badge>
                 <span className="text-muted-foreground">{product.set}</span>
               </div>
 
               <p className="text-4xl font-bold text-primary-glow mb-6">
                 ${product.price?.toFixed(2)}
               </p>
-            </div>
-
-            {/* Description */}
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">Description</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                {"this is a test description for the product. It provides details about the card, its features, and why it's a great addition to any collection."}
-              </p>
-            </div>
-
-            <Separator className="bg-border/50" />
-
-            {/* Card Stats */}
-            <div>
-              <h3 className="text-lg font-semibold text-foreground mb-4">Card Details</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">HP:</span>
-                    <span className="text-foreground font-medium">{"test"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Type:</span>
-                    <span className="text-foreground font-medium">{"test2"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Weakness:</span>
-                    <span className="text-foreground font-medium">{"test3"}</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Card #:</span>
-                    <span className="text-foreground font-medium">{"test4"}</span>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <Separator className="bg-border/50" />

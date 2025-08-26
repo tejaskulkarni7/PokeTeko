@@ -152,24 +152,6 @@ const AllCards = () => {
                 <ArrowDown className="ml-1 w-4 h-4" />
               ))}
           </Button>
-
-          {/* Sort by Created At */}
-          <Button
-            variant="ghost"
-            onClick={() => {
-              setSortKey("created_at");
-              setSortOrder((prev) => (sortKey === "created_at" && prev === "desc" ? "asc" : "desc"));
-            }}
-            className="text-foreground hover:text-primary hover:bg-primary/10 flex items-center"
-          >
-            Newly Added
-            {sortKey === "created_at" &&
-              (sortOrder === "asc" ? (
-                <ArrowUp className="ml-1 w-4 h-4" />
-              ) : (
-                <ArrowDown className="ml-1 w-4 h-4" />
-              ))}
-          </Button>
         </div>
 
 

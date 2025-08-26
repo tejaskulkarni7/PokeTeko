@@ -22,6 +22,10 @@ const Index = () => {
     navigate("/all-cards");
   };
 
+  const seeAllApparel = () => {
+    navigate("/apparel");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-tavern relative">
       <Header />
@@ -83,7 +87,7 @@ const Index = () => {
   </Button>
 
   <Button
-    onClick={seeAllCards}
+    onClick={seeAllApparel}
     className="flex-1 text-xl px-6 py-3 bg-transparent text-white font-semibold 
                border-2 border-transparent 
                hover:border-primary/100 hover:bg-transparent 

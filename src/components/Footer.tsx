@@ -1,6 +1,8 @@
 import {Mail, MapPin, Phone } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import PokeTavernLogo from "@/assets/lantern_logo.png";
+import { HashLink } from 'react-router-hash-link';
+
 const Footer = () => {
   return (
     <footer className="bg-gradient-tavern border-t border-border/50 mt-20">
@@ -29,8 +31,7 @@ const Footer = () => {
               </h1>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              Your magical destination for legendary Pokemon cards. 
-              Each card tells a story waiting to be discovered.
+              Your magical destination for everything Pokemon. 
             </p>
           </div>
 
@@ -38,25 +39,43 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-foreground">Quick Links</h4>
             <ul className="space-y-2">
-              {["Shop All Cards", "New Arrivals", "Rare Cards", "Card Sets", "Gift Cards"].map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                    {link}
+              {[
+                { name: "Shop All Cards", href: "/all-cards" },
+                { name: "Shop Apparel", href: "/apparel" },
+                { name: "PokeTek Services", href: "/services" },
+                { name: "My Cart", href: "/cart" },
+              ].map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.name}
                   </a>
                 </li>
               ))}
             </ul>
           </div>
 
+
+
           {/* Customer Service */}
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-foreground">Customer Service</h4>
             <ul className="space-y-2">
-              {["Contact Us", "Shipping Info", "Returns", "Card Grading", "Authentication"].map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                    {link}
-                  </a>
+              {[
+                { name: "Contact Us", href: "/services#contact" },
+                { name: "Shipping Info", href: "/services#shipping" },
+                { name: "Returns", href: "/services#returns" },
+              ].map((link) => (
+                <li key={link.name}>
+                  <HashLink
+                    smooth // 🚀 enables smooth scroll
+                    to={link.href}
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {link.name}
+                  </HashLink>
                 </li>
               ))}
             </ul>
@@ -68,15 +87,15 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-muted-foreground">
                 <MapPin className="w-4 h-4 text-primary" />
-                <span className="text-sm">123 Tavern Street, Magic City, MC 12345</span>
+                <span className="text-sm">Fremont, California</span>
               </div>
               <div className="flex items-center space-x-3 text-muted-foreground">
                 <Phone className="w-4 h-4 text-primary" />
-                <span className="text-sm">(555) 123-POKE</span>
+                <span className="text-sm">510-993-8339</span>
               </div>
               <div className="flex items-center space-x-3 text-muted-foreground">
                 <Mail className="w-4 h-4 text-primary" />
-                <span className="text-sm">hello@poketavern.com</span>
+                <span className="text-sm">tejkul7@gmail.com</span>
               </div>
             </div>
           </div>
