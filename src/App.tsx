@@ -16,6 +16,8 @@ import LoadingOverlay from "@/components/LoadingOverlay";
 import Checkout from "./pages/Checkout";
 import AllApparelPage from "./pages/AllApparel";
 import ApparelProductPage from "./pages/ApparelProductPage";
+import Success from "./pages/success";
+import Privacy from "./pages/privacy";
 
 const queryClient = new QueryClient();
 
@@ -33,8 +35,10 @@ const App = () => (
               <Route path="/all-cards" element={<AllCards />} />
               <Route path="/apparel" element={<AllApparelPage />} />
               <Route path="/apparel/:id" element={<ApparelProductPage />} />
+              <Route path="/privacy" element={<Privacy />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/success" element={<Success />} />
               <Route path="/services" element={<Services />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="*" element={<NotFound />} />

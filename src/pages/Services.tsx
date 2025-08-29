@@ -56,7 +56,7 @@ const Services = () => {
 
         {/* Main content container */}
         <div className="container mx-auto px-6 py-24 text-center relative z-10">
-          {/* PokeTek Services Header */}
+          {/* PokeTeko Services Header */}
           <div className="mb-8">
             <h1 
               className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4"
@@ -67,7 +67,7 @@ const Services = () => {
                 filter: "drop-shadow(0 0 10px rgba(168, 85, 247, 0.5))"
               }}
             >
-              PokeTek Services
+              PokeTeko Services
             </h1>
           </div>
           

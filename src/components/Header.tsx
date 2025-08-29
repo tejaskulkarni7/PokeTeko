@@ -134,7 +134,7 @@ const Header = () => {
               <span
                 className="absolute inset-0 rounded-full"
                 style={{
-                  background: "radial-gradient(circle, #ffd9007e 0%, transparent 90%)",
+                  background: "radial-gradient(circle, #ff00d47e 0%, transparent 90%)",
                   filter: "blur(9px)",
                   zIndex: 0,
                 }}
@@ -146,7 +146,7 @@ const Header = () => {
                 />
             </div>
             <h1 className="text-2xl font-bold text-white px-0 py-0">
-              PokeTek
+              PokeTeko
             </h1>
           </div>
 
@@ -191,7 +191,7 @@ const Header = () => {
             className="px-4 py-2 bg-card/50 border border-border/50 hover:border-primary/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/30 transition-all duration-200"
             onClick={isServicesPage ? handleShopClick : handleServicesClick}
           >
-            {isServicesPage ? 'PokeTek Shop' : 'PokeTek Services'}
+            {isServicesPage ? 'PokeTeko Shop' : 'PokeTeko Services'}
           </Button>
           
           {/* Navigation */}

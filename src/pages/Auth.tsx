@@ -68,7 +68,7 @@ export default function Auth() {
       if (success) {
         toast({
           title: "Account created!",
-          description: "Welcome to PokeTek! Your account has been created successfully.",
+          description: "Welcome to PokeTeko! Your account has been created successfully.",
         });
       } else {
         toast({
@@ -127,7 +127,7 @@ return (
                   className="w-10 h-10 bg-transparent relative z-10"
                 />
             </div>
-            <h1 className="text-2xl font-bold text-white px-0 py-0">PokeTek</h1>
+            <h1 className="text-2xl font-bold text-white px-0 py-0">PokeTeko</h1>
           </div>
         </div>
 

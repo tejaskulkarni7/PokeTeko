@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import ProductGrid from "@/components/ProductGrid";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import DarkVeil from "@/components/DarkVeil";
 import { useEffect, useState } from "react";
@@ -9,6 +10,7 @@ import { useEffect, useState } from "react";
 const Index = () => {
   const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
 
   // Prevent flash of unstyled content
   useEffect(() => {
@@ -28,6 +30,21 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-tavern relative">
+      {/* Banner */}
+      {showBanner && (
+        <div className="bg-primary/90 text-white px-4 py-3 text-center flex items-center justify-center relative z-20">
+          <span className="text-sm md:text-base font-medium">
+            All prices already include shipping and taxes — no surprises at checkout.
+          </span>
+          <button
+            onClick={() => setShowBanner(false)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-200"
+          >
+            <X size={18} />
+          </button>
+        </div>
+      )}
+
       <Header />
 
       {/* Content with fade-in transition */}
@@ -56,7 +73,7 @@ const Index = () => {
                     textShadow: "0 0 20px #6d29daff, 0 0 32px #9f20e9e7",
                   }}
                 >
-                  PokeTek Shop
+                  PokeTeko Shop
                 </span>
               </h1>
 
@@ -72,39 +89,31 @@ const Index = () => {
               </div>
 
               {/* Side-by-side buttons */}
-              <div className="flex justify-center gap-4 mt-6">
-<div className="flex justify-center gap-20 mt-6">
-  <Button
-    onClick={seeAllCards}
-    className="flex-1 text-xl px-6 py-3 bg-transparent text-white font-semibold 
-               border-2 border-transparent 
-               hover:border-primary/100 hover:bg-transparent 
-               focus:ring-2 focus:ring-primary/30 
-               transition-all duration-300"
-    size="lg"
-  >
-    Cards
-  </Button>
+              <div className="flex justify-center gap-20 mt-6">
+                <Button
+                  onClick={seeAllCards}
+                  className="flex-1 text-xl px-6 py-3 bg-transparent text-white font-semibold 
+                            border-2 border-transparent 
+                            hover:border-primary/100 hover:bg-transparent 
+                            focus:ring-2 focus:ring-primary/30 
+                            transition-all duration-300"
+                  size="lg"
+                >
+                  Cards
+                </Button>
 
-  <Button
-    onClick={seeAllApparel}
-    className="flex-1 text-xl px-6 py-3 bg-transparent text-white font-semibold 
-               border-2 border-transparent 
-               hover:border-primary/100 hover:bg-transparent 
-               focus:ring-2 focus:ring-primary/30 
-               transition-all duration-300"
-    size="lg"
-  >
-    Apparel
-  </Button>
-</div>
-
-
-
-
-
-            </div>
-
+                <Button
+                  onClick={seeAllApparel}
+                  className="flex-1 text-xl px-6 py-3 bg-transparent text-white font-semibold 
+                            border-2 border-transparent 
+                            hover:border-primary/100 hover:bg-transparent 
+                            focus:ring-2 focus:ring-primary/30 
+                            transition-all duration-300"
+                  size="lg"
+                >
+                  Apparel
+                </Button>
+              </div>
             </div>
           </div>
         </section>

@@ -14,7 +14,6 @@ interface ApparelProduct {
   id: number;
   external_id: string;
   name: string;
-  variants: number;
   synced: number;
   thumbnail_url: string;
   is_ignored: boolean;
@@ -69,11 +68,7 @@ const AllApparelPage = () => {
         if (sortKey === "name") {
           aVal = a.name.toLowerCase();
           bVal = b.name.toLowerCase();
-        } else if (sortKey === "variants") {
-          aVal = a.variants;
-          bVal = b.variants;
-        }
-        
+        }   
         if (typeof aVal === "string") {
           return sortOrder === "asc" ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
         }
@@ -111,45 +106,6 @@ const AllApparelPage = () => {
           </div>
         </div>
 
-        {/* Filter & Sort Controls */}
-        <div className="flex flex-wrap gap-4 mb-8 items-center">
-          {/* Sort by Name */}
-          <Button
-            variant="ghost"
-            onClick={() => {
-              setSortKey("name");
-              setSortOrder((prev) => (sortKey === "name" && prev === "desc" ? "asc" : "desc"));
-            }}
-            className="text-foreground hover:text-primary hover:bg-primary/10 flex items-center"
-          >
-            Name
-            {sortKey === "name" &&
-              (sortOrder === "asc" ? (
-                <ArrowUp className="ml-1 w-4 h-4" />
-              ) : (
-                <ArrowDown className="ml-1 w-4 h-4" />
-              ))}
-          </Button>
-
-          {/* Sort by Variants Count */}
-          <Button
-            variant="ghost"
-            onClick={() => {
-              setSortKey("variants");
-              setSortOrder((prev) => (sortKey === "variants" && prev === "desc" ? "asc" : "desc"));
-            }}
-            className="text-foreground hover:text-primary hover:bg-primary/10 flex items-center"
-          >
-            Variants
-            {sortKey === "variants" &&
-              (sortOrder === "asc" ? (
-                <ArrowUp className="ml-1 w-4 h-4" />
-              ) : (
-                <ArrowDown className="ml-1 w-4 h-4" />
-              ))}
-          </Button>
-        </div>
-
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filtered.map((product) => (
@@ -180,10 +136,6 @@ const AllApparelPage = () => {
                   <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors truncate">
                     {product.name}
                   </h3>
-                  
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span>{product.variants} variants</span>
-                  </div>
                 </div>
               </CardContent>
             </Card>

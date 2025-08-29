@@ -223,22 +223,46 @@ const handleRemoveFromCart = async () => {
 
             {/* Add to Cart */}
             <div className="space-y-4">
-              <Button
-                onClick={inCart ? handleRemoveFromCart : handleAddToCart}
-                className={`w-full font-semibold shadow-glow transition-all duration-300 ${
-                  inCart
-                    ? "bg-red-500 hover:bg-red-600 text-white"
-                    : "bg-gradient-gold hover:bg-gradient-ember text-primary-foreground"
-                }`}
-                size="lg"
-              >
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                {inCart ? "Remove from Cart" : "Add to Cart"}
-              </Button>
+              {!user ? (
+                <div className="space-y-4">
+                  <div className="bg-blue-600/20 border border-blue-600 rounded-md p-3 text-blue-400">
+                    Please{" "}
+                    <button
+                      onClick={() => navigate("/auth")}
+                      className="underline hover:text-blue-300 transition-colors"
+                    >
+                      sign in
+                    </button>{" "}
+                    to add items to your cart.
+                  </div>
+                  <Button
+                    onClick={() => navigate("/auth")}
+                    className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold"
+                    size="lg"
+                  >
+                    Sign In to Purchase
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  onClick={inCart ? handleRemoveFromCart : handleAddToCart}
+                  className={`w-full font-semibold shadow-glow transition-all duration-300 ${
+                    inCart
+                      ? "bg-red-500 hover:bg-red-600 text-white"
+                      : "bg-gradient-gold hover:bg-gradient-ember text-primary-foreground"
+                  }`}
+                  size="lg"
+                >
+                  <ShoppingCart className="w-5 h-5 mr-2" />
+                  {inCart ? "Remove from Cart" : "Add to Cart"}
+                </Button>
+              )}
+
               <p className="text-sm text-muted-foreground text-center">
                 Fast shipping • Secure packaging • 30-day return policy
               </p>
             </div>
+
           </div>
         </div>
       </div>

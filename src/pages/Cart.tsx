@@ -22,8 +22,9 @@ interface CartProduct {
   image: string;
   created_at: string;
   type: 'pokemon' | 'apparel';
-  variants?: number;
   thumbnail_url?: string;
+  size?: string; // Add size property for apparel items
+  cart_id?: number; // Add cart_id to help with removal
 }
 
 const Cart = () => {
@@ -39,7 +40,6 @@ const Cart = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
     const fetchCart = async () => {
       setIsLoading(true);
       
@@ -52,10 +52,10 @@ const Cart = () => {
       }
 
       try {
-        // Step 1: Get all items from cart for the current user
+        // Step 1: Get all items from cart for the current user (including size for apparel)
         const { data: cartItems, error: cartError } = await supabase
           .from("cart")
-          .select("product_id, product_type")
+          .select("id, product_id, product_type, size")
           .eq("user_id", user.id);
 
         if (cartError || !cartItems.length) {
@@ -80,11 +80,15 @@ const Cart = () => {
             .in("id", pokemonIds);
 
           if (!pokeError && pokemons) {
-            const enrichedPokemons = pokemons.map((product): CartProduct => ({
-              ...product,
-              image: `${SUPABASE_URL}/storage/v1/object/public/images/${product.image}.jpg`,
-              type: 'pokemon'
-            }));
+            const enrichedPokemons = pokemons.map((product): CartProduct => {
+              const cartItem = pokemonItems.find(item => item.product_id === product.id);
+              return {
+                ...product,
+                image: `${SUPABASE_URL}/storage/v1/object/public/images/${product.image}.jpg`,
+                type: 'pokemon',
+                cart_id: cartItem?.id
+              };
+            });
             allProducts.push(...enrichedPokemons);
           }
         }
@@ -93,6 +97,7 @@ const Cart = () => {
         if (apparelItems.length > 0) {
           const apparelPromises = apparelItems.map(async (item) => {
             try {
+              console.log(apparelItems)
               const { data, error } = await supabase.functions.invoke('rapid-handler', {
                 body: { name: `sync/products/${item.product_id}` },
               });
@@ -102,10 +107,12 @@ const Cart = () => {
                 return null;
               }
 
-              const apparelProduct = data.result;
+              const apparelProduct = data.result.find(
+              (prod: any) => prod.id === item.product_id
+            );
               
               // Use the enhanced pricing info from the cloud function
-              const price = apparelProduct.base_price || apparelProduct.min_price || 25.00;
+              const price = apparelProduct.base_price || apparelProduct.min_price || 19.99;
               
               return {
                 id: apparelProduct.id,
@@ -114,8 +121,9 @@ const Cart = () => {
                 image: apparelProduct.thumbnail_url || '',
                 created_at: new Date().toISOString(),
                 type: 'apparel' as const,
-                variants: apparelProduct.variants_count || apparelProduct.variants || 0,
-                thumbnail_url: apparelProduct.thumbnail_url
+                thumbnail_url: apparelProduct.thumbnail_url,
+                size: item.size, // Include size from cart
+                cart_id: item.id
               };
             } catch (error) {
               console.error(`Error fetching apparel ${item.product_id}:`, error);
@@ -140,8 +148,8 @@ const Cart = () => {
       }
     };
 
-    fetchCart();
-    
+  useEffect(() => {
+    fetchCart(); 
   }, [user]);
 
   // Filter + Sort
@@ -192,22 +200,41 @@ const Cart = () => {
     setFiltered(result);
   }, [conditionFilter, productTypeFilter, priceRange, sortKey, sortOrder, cartProducts]);
 
-  const handleGoBack = () => navigate(-1);
+  const handleGoBack = () => navigate('/');
 
-  const handleRemoveFromCart = async (productId: number, productType: string) => {
+  const handleRemoveFromCart = async (product: CartProduct) => {
     if (!user) return;
 
     try {
-      const { error } = await supabase
-        .from("cart")
-        .delete()
-        .eq("user_id", user.id)
-        .eq("product_id", productId)
-        .eq("product_type", productType);
+      // Use cart_id for more precise deletion if available
+      if (product.cart_id) {
+        const { error } = await supabase
+          .from("cart")
+          .delete()
+          .eq("id", product.cart_id);
+        
+        if (!error) {
+          await fetchCart();
+        }
+      } else {
+        // Fallback to the original method
+        const deleteQuery = supabase
+          .from("cart")
+          .delete()
+          .eq("user_id", user.id)
+          .eq("product_id", product.id)
+          .eq("product_type", product.type);
 
-      if (!error) {
-        // Remove from local state
-        setCartProducts(prev => prev.filter(p => !(p.id === productId && p.type === productType)));
+        // For apparel items, also match by size to ensure we remove the right item
+        if (product.type === 'apparel' && product.size) {
+          deleteQuery.eq("size", product.size);
+        }
+
+        const { error } = await deleteQuery;
+        
+        if (!error) {
+          await fetchCart();
+        }
       }
     } catch (error) {
       console.error('Error removing from cart:', error);
@@ -244,13 +271,20 @@ const Cart = () => {
               </div>
             )}
             
+            {/* Size badge for apparel items */}
+            {product.type === 'apparel' && product.size && (
+              <div className="absolute top-2 right-2 bg-primary text-primary-foreground px-2 py-1 rounded-md text-xs font-semibold">
+                {product.size}
+              </div>
+            )}
+            
             {/* Overlay with actions */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div className="absolute bottom-4 right-4">
                 <Button
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleRemoveFromCart(product.id, product.type);
+                    handleRemoveFromCart(product);
                   }}
                   variant="destructive"
                   size="sm"
@@ -278,10 +312,14 @@ const Cart = () => {
                 </>
               ) : (
                 <>
-                  <span>{product.variants} variants</span>
                   <span className="bg-muted px-2 py-1 rounded text-xs">
                     Apparel
                   </span>
+                  {product.size && (
+                    <span className="bg-muted px-2 py-1 rounded text-xs">
+                      Size: {product.size}
+                    </span>
+                  )}
                 </>
               )}
             </div>
@@ -337,20 +375,6 @@ const Cart = () => {
           <>
             {/* Filter & Sort Controls */}
             <div className="flex flex-wrap gap-4 mb-8 items-center">
-
-              {/* Product Type Filter */}
-              <div className="relative">
-                <select
-                  className="border-none p-2 rounded text-white bg-black focus:ring-2 focus:ring-primary transition-colors shadow hover:bg-primary/10 hover:text-primary"
-                  value={productTypeFilter}
-                  onChange={(e) => setProductTypeFilter(e.target.value)}
-                  style={{ minWidth: 120 }}
-                >
-                  <option value="" className="bg-black text-white">All Types</option>
-                  <option value="pokemon" className="bg-black text-white">Pokemon Cards</option>
-                  <option value="apparel" className="bg-black text-white">Apparel</option>
-                </select>
-              </div>
 
               {/* Condition Filter (only show for Pokemon or when no type filter) */}
               {(!productTypeFilter || productTypeFilter === 'pokemon') && (
@@ -453,7 +477,7 @@ const Cart = () => {
             {/* Product Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filtered.map((product) => (
-                <CartProductCard key={`${product.type}-${product.id}`} product={product} />
+                <CartProductCard key={`${product.type}-${product.id}-${product.size || 'no-size'}`} product={product} />
               ))}
             </div>
           </>

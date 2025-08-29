@@ -27,7 +27,7 @@ const Footer = () => {
                 />
               </div>
               <h1 className="text-2xl font-bold text-white px-0 py-0">
-                PokeTek
+                PokeTeko
               </h1>
             </div>
             <p className="text-muted-foreground leading-relaxed">
@@ -42,7 +42,7 @@ const Footer = () => {
               {[
                 { name: "Shop All Cards", href: "/all-cards" },
                 { name: "Shop Apparel", href: "/apparel" },
-                { name: "PokeTek Services", href: "/services" },
+                { name: "PokeTeko Services", href: "/services" },
                 { name: "My Cart", href: "/cart" },
               ].map((link) => (
                 <li key={link.name}>
@@ -65,8 +65,9 @@ const Footer = () => {
             <ul className="space-y-2">
               {[
                 { name: "Contact Us", href: "/services#contact" },
-                { name: "Shipping Info", href: "/services#shipping" },
-                { name: "Returns", href: "/services#returns" },
+                { name: "Shipping Info & Returns", href: "/privacy" },
+                { name: "Terms of Service", href: "/privacy" },
+                { name: "Privacy Policy", href: "/privacy" },
               ].map((link) => (
                 <li key={link.name}>
                   <HashLink
@@ -105,19 +106,8 @@ const Footer = () => {
 
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p className="text-muted-foreground text-sm">
-            © 2024 PokeTek. All rights reserved. Pokemon cards are © Nintendo/Game Freak.
+            © 2024 PokeTeko. All rights reserved. Pokemon cards are © Nintendo/Game Freak.
           </p>
-          <div className="flex space-x-6">
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-              Privacy Policy
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-              Terms of Service
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-              Cookie Policy
-            </a>
-          </div>
         </div>
       </div>
     </footer>

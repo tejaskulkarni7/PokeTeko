@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, ShoppingCart, Heart, Share2 } from "lucide-react";
+import { ArrowLeft, ShoppingCart, Share2 } from "lucide-react";
 import { useLoading } from "@/components/LoadingContext";
 import { useAuth } from "@/components/AuthProvider";
 import { useToast } from "@/hooks/use-toast";
@@ -16,11 +15,13 @@ interface ApparelProduct {
   id: number;
   external_id: string;
   name: string;
-  variants: number;
   synced: number;
   thumbnail_url: string;
   is_ignored: boolean;
 }
+
+const APPAREL_SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'] as const;
+type ApparelSize = typeof APPAREL_SIZES[number];
 
 const ApparelProductPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,6 +33,7 @@ const ApparelProductPage = () => {
   const [product, setProduct] = useState<ApparelProduct | null>(null);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [inCart, setInCart] = useState(false);
+  const [selectedSize, setSelectedSize] = useState<ApparelSize | ''>('');
 
   useEffect(() => {
     const fetchProductAndCart = async () => {
@@ -87,15 +89,25 @@ const ApparelProductPage = () => {
       return;
     }
 
+    if (!selectedSize) {
+      toast({
+        title: "Size Required",
+        description: "Please select a size before adding to cart.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsAddingToCart(true);
     try {
-      // Check if item already exists in cart
+      // Check if item already exists in cart with same size
       const { count, error: fetchError } = await supabase
         .from("cart")
         .select("*", { count: "exact", head: true })
         .eq("user_id", user.id)
         .eq("product_type", 'apparel')
         .eq("product_id", product.id)
+        .eq("size", selectedSize)
         .limit(1);
 
       if (fetchError && fetchError.code !== "PGRST116") {
@@ -110,7 +122,7 @@ const ApparelProductPage = () => {
       if (count > 0) {
         toast({
           title: "Already in Cart",
-          description: `${product.name} is already in your cart.`,
+          description: `${product.name} (${selectedSize}) is already in your cart.`,
         });
         return;
       }
@@ -123,6 +135,7 @@ const ApparelProductPage = () => {
             product_type: 'apparel',
             product_id: product.id,
             user_id: user.id,
+            size: selectedSize,
           }
         ]);
 
@@ -135,7 +148,7 @@ const ApparelProductPage = () => {
       } else {
         toast({
           title: "Added to Cart!",
-          description: `${product.name} has been added to your cart.`,
+          description: `${product.name} (${selectedSize}) has been added to your cart.`,
         });
         setInCart(true);
       }
@@ -297,27 +310,34 @@ const ApparelProductPage = () => {
                 <span className="text-muted-foreground">ID: {product.external_id}</span>
               </div>
 
-              <div className="flex flex-wrap gap-2 mb-4">
-                <Badge variant="secondary" className="bg-muted text-foreground">
-                  {product.variants} Variants Available
-                </Badge>
-                <Badge variant="secondary" className="bg-muted text-foreground">
-                  {product.synced} Synced
-                </Badge>
-                <Badge 
-                  variant={!product.is_ignored ? 'default' : 'destructive'}
-                  className={!product.is_ignored ? 'bg-green-600' : ''}
-                >
-                  {!product.is_ignored ? 'Active' : 'Ignored'}
-                </Badge>
-              </div>
+            </div>
 
-              <p className="text-2xl font-bold text-primary-glow mb-6">
-                Multiple variants available
-                <span className="block text-sm text-muted-foreground mt-1">
-                  Pricing varies by variant
-                </span>
-              </p>
+            <Separator className="bg-border/50" />
+
+            {/* Size Selection */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-foreground">Select Size</h3>
+              <div className="grid grid-cols-3 gap-3">
+                {APPAREL_SIZES.map((size) => (
+                  <Button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    variant={selectedSize === size ? "default" : "outline"}
+                    className={`
+                      ${selectedSize === size 
+                        ? "bg-primary text-primary-foreground border-primary" 
+                        : "border-border hover:border-primary hover:text-primary"
+                      }
+                      transition-all duration-200
+                    `}
+                  >
+                    {size}
+                  </Button>
+                ))}
+              </div>
+              {!selectedSize && (
+                <p className="text-sm text-amber-400">Please select a size to continue</p>
+              )}
             </div>
 
             <Separator className="bg-border/50" />
@@ -348,7 +368,7 @@ const ApparelProductPage = () => {
                 <div className="flex gap-4">
                   <Button
                     onClick={inCart ? handleRemoveFromCart : handleAddToCart}
-                    disabled={isAddingToCart || product.is_ignored}
+                    disabled={isAddingToCart || product.is_ignored || (!selectedSize && !inCart)}
                     className={`flex-1 font-semibold shadow-glow transition-all duration-300 ${
                       inCart
                         ? "bg-red-500 hover:bg-red-600 text-white"
@@ -365,13 +385,6 @@ const ApparelProductPage = () => {
                     }
                   </Button>
                   
-                  <Button
-                    variant="outline"
-                    className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-                    size="lg"
-                  >
-                    <Heart className="w-5 h-5" />
-                  </Button>
                 </div>
               )}
 
@@ -385,16 +398,6 @@ const ApparelProductPage = () => {
                 This product is currently not available for purchase.
               </div>
             )}
-
-            {/* Product Info */}
-            <div className="bg-card/50 rounded-lg p-4 space-y-2">
-              <h3 className="font-semibold text-foreground">Product Information</h3>
-              <div className="text-sm text-muted-foreground space-y-1">
-                <p>• This product has {product.variants} different variants</p>
-                <p>• {product.synced} variants are currently synced and available</p>
-                <p>• Product ID: {product.external_id}</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
