@@ -2,8 +2,35 @@ import {Mail, MapPin, Phone } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import PokeTavernLogo from "@/assets/lantern_logo.png";
 import { HashLink } from 'react-router-hash-link';
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+  
+  const seeAllCards = () => {
+    navigate("/all-cards");
+  };
+
+  const seeAllApparel = () => {
+    navigate("/apparel");
+  };
+
+  const seeServices = () => {
+    navigate("/services");
+  }
+
+  const seeCart = () => {
+    navigate("/cart");
+  }
+
+  const goToContact = () => {
+    navigate("/services#contact");
+  }
+
+  const goToPrivacy = () => {
+    navigate("/privacy");
+  }
+
   return (
     <footer className="bg-gradient-tavern border-t border-border/50 mt-20">
       <div className="container mx-auto px-4 py-12">
@@ -40,43 +67,40 @@ const Footer = () => {
             <h4 className="text-lg font-semibold text-foreground">Quick Links</h4>
             <ul className="space-y-2">
               {[
-                { name: "Shop All Cards", href: "/all-cards" },
-                { name: "Shop Apparel", href: "/apparel" },
-                { name: "PokeTeko Services", href: "/services" },
-                { name: "My Cart", href: "/cart" },
+                { name: "Shop All Cards", action: seeAllCards },
+                { name: "Shop Apparel", action: seeAllApparel },
+                { name: "PokeTeko Services", action: seeServices },
+                { name: "My Cart", action: seeCart },
               ].map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                  <button
+                    onClick={link.action}
+                    className="text-muted-foreground hover:text-primary transition-colors text-left"
                   >
                     {link.name}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
           </div>
-
-
 
           {/* Customer Service */}
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-foreground">Customer Service</h4>
             <ul className="space-y-2">
               {[
-                { name: "Contact Us", href: "/services#contact" },
-                { name: "Shipping Info & Returns", href: "/privacy" },
-                { name: "Terms of Service", href: "/privacy" },
-                { name: "Privacy Policy", href: "/privacy" },
+                { name: "Contact Us", action: goToContact },
+                { name: "Shipping Info & Returns", action: goToPrivacy },
+                { name: "Terms of Service", action: goToPrivacy },
+                { name: "Privacy Policy", action: goToPrivacy },
               ].map((link) => (
                 <li key={link.name}>
-                  <HashLink
-                    smooth // 🚀 enables smooth scroll
-                    to={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors"
+                  <button
+                    onClick={link.action}
+                    className="text-muted-foreground hover:text-primary transition-colors text-left"
                   >
                     {link.name}
-                  </HashLink>
+                  </button>
                 </li>
               ))}
             </ul>
