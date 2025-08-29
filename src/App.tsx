@@ -18,7 +18,7 @@ import AllApparelPage from "./pages/AllApparel";
 import ApparelProductPage from "./pages/ApparelProductPage";
 import Success from "./pages/Success";
 import Privacy from "./pages/privacy";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react"
 
 const queryClient = new QueryClient();
 
@@ -27,7 +27,6 @@ const App = () => (
     <LoadingProvider>
       <AuthProvider>
         <TooltipProvider>
-          <Analytics />
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -46,6 +45,7 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
+          <Analytics />
           <LoadingOverlay />
         </TooltipProvider>
       </AuthProvider>
