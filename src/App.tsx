@@ -16,7 +16,7 @@ import LoadingOverlay from "@/components/LoadingOverlay";
 import Checkout from "./pages/Checkout";
 import AllApparelPage from "./pages/AllApparel";
 import ApparelProductPage from "./pages/ApparelProductPage";
-import Success from "./pages/success";
+import Success from "./pages/Success";
 import Privacy from "./pages/privacy";
 
 const queryClient = new QueryClient();
