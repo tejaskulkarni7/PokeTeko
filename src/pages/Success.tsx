@@ -97,6 +97,23 @@ const Success = () => {
         console.error('Failed to clear cart:', cartClearError);
       }
 
+      const pokemonIds = cartItems
+      .filter(item => item.product_type === "pokemon")
+      .map(item => item.product_id);
+
+    if (pokemonIds.length > 0) {
+      const { error: pokemonDeleteError } = await supabase
+        .from("pokemon")
+        .delete()
+        .in("id", pokemonIds);
+
+      if (pokemonDeleteError) {
+        console.error("Failed to delete purchased pokemon from db:", pokemonDeleteError);
+      } else {
+        console.log("Successfully deleted purchased pokemon:", pokemonIds);
+      }
+    }
+
       console.log('Order completed successfully with shipping information from draft:', orderDraft.id);
 
     } catch (error) {
